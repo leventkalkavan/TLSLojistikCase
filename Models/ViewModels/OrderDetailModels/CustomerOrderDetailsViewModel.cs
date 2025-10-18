@@ -11,5 +11,6 @@ public class CustomerOrderDetailsViewModel
     public decimal Tax { get; set; }
     public string DeliveryAddress { get; set; }
     public string InvoiceAddress { get; set; }
+    public bool IsActive { get; set; }
     public List<OrderDetailInfo> OrderDetails { get; set; } = new();
 }

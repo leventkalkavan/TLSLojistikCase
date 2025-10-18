@@ -9,4 +9,5 @@ public interface IOrderService
     Task<IEnumerable<CustomerOrderSummaryViewModel>> GetCustomerOrderSummaryAsync();
     Task<IEnumerable<OrderViewModel>> GetOrdersByCustomerIdAsync(string customerId);
     Task<OrderViewModel> CreateAsync(OrderCreateViewModel model);
+    Task<bool> CancelOrderAsync(Guid orderId, string customerId);
 }

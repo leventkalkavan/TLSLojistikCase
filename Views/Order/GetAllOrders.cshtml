@@ -6,7 +6,7 @@
 
 <table class="table table-bordered">
     <thead>
-        <tr><th>Müşteri</th><th>Email</th><th>Sipariş Sayısı</th><th>Ara Toplam</th><th>KDV</th><th>Toplam</th><th>Son Sipariş</th><th></th></tr>
+        <tr><th>Müşteri</th><th>Email</th><th>Aktif Sipariş</th><th>İptal Edilen</th><th>Ara Toplam</th><th>KDV</th><th>Toplam</th><th>Son Sipariş</th><th></th></tr>
     </thead>
     <tbody>
         @foreach (var customer in Model)
@@ -15,6 +15,7 @@
                 <td>@customer.CustomerName</td>
                 <td>@customer.CustomerEmail</td>
                 <td>@customer.OrderCount</td>
+                <td>@customer.CancelledOrderCount</td>
                 <td>@customer.TotalAmount.ToString("C")</td>
                 <td>@customer.TotalTax.ToString("C")</td>
                 <td>@customer.GrandTotal.ToString("C")</td>
@@ -33,6 +34,75 @@
 
 @section Scripts {
     <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/orderHub")
+            .build();
+
+        connection.start().then(function () {
+            console.log("SignalR Connected");
+        }).catch(function (err) {
+            console.error(err.toString());
+        });
+
+        connection.on("NewOrderCreated", function (order) {
+            showOrderNotification(order);
+            updateOrderTable(order);
+        });
+
+        connection.on("OrderCancelled", function (order) {
+            showCancelledNotification(order);
+            updateOrderTable(order);
+        });
+
+        function showOrderNotification(order) {
+            const notification = $(`
+                <div class="alert alert-success alert-dismissible fade show position-fixed" style="top: 20px; right: 20px; z-index: 9999; min-width: 300px;">
+                    <strong>Yeni Sipariş!</strong><br>
+                    Sipariş No: ${order.orderNo}<br>
+                    Müşteri: ${order.customerName}<br>
+                    Tutar: ${order.totalPrice.toLocaleString('tr-TR', {style: 'currency', currency: 'TRY'})}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `);
+            $('body').append(notification);
+            
+            setTimeout(function() {
+                notification.alert('close');
+            }, 5000);
+        }
+
+        function showCancelledNotification(order) {
+            const notification = $(`
+                <div class="alert alert-danger alert-dismissible fade show position-fixed" style="top: 20px; right: 20px; z-index: 9999; min-width: 300px;">
+                    <strong>Sipariş İptal Edildi!</strong><br>
+                    Sipariş No: ${order.orderNo}<br>
+                    Müşteri: ${order.customerName}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `);
+            $('body').append(notification);
+            
+            setTimeout(function() {
+                notification.alert('close');
+            }, 5000);
+        }
+
+        function updateOrderTable(order) {
+            $.ajax({
+                url: '@Url.Action("GetAllOrders", "Order")',
+                type: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                success: function(data) {
+                    $('tbody').html(data);
+                },
+                error: function() {
+                    console.error('Tablo güncellenirken hata oluştu');
+                }
+            });
+        }
+
         function loadCustomerOrders(customerId) {
             $.get('@Url.Action("GetCustomerOrders", "Order")', { customerId: customerId }, function(data) {
                 $('#modalContainer').html(data);

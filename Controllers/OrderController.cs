@@ -34,6 +34,12 @@ namespace StockManagement.Controllers
         public async Task<IActionResult> GetAllOrders()
         {
             var customerSummaries = await _orderService.GetCustomerOrderSummaryAsync();
+            
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_OrderTableBody", customerSummaries);
+            }
+            
             return View(customerSummaries);
         }
 
@@ -134,6 +140,19 @@ namespace StockManagement.Controllers
             
             var myOrders = await _orderDetailService.GetCustomerOrderDetailsAsync(currentUser.Id);
             return PartialView("_MyOrdersModal", myOrders);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CancelOrder(Guid orderId)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                return Unauthorized();
+            }
+
+            var result = await _orderService.CancelOrderAsync(orderId, currentUser.Id);
+            return Json(new { success = result });
         }
     }
 }

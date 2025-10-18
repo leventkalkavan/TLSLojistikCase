@@ -108,6 +108,37 @@
 
 @section Scripts {
     <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/orderHub")
+            .build();
+
+        connection.start().then(function () {
+            console.log("SignalR Connected");
+        }).catch(function (err) {
+            console.error(err.toString());
+        });
+
+        connection.on("NewOrderCreated", function (order) {
+            showOrderNotification(order);
+        });
+
+        function showOrderNotification(order) {
+            const notification = $(`
+                <div class="alert alert-success alert-dismissible fade show position-fixed" style="top: 20px; right: 20px; z-index: 9999; min-width: 300px;">
+                    <strong>Yeni Sipariş!</strong><br>
+                    Sipariş No: ${order.orderNo}<br>
+                    Müşteri: ${order.customerName}<br>
+                    Tutar: ${order.totalPrice.toLocaleString('tr-TR', {style: 'currency', currency: 'TRY'})}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `);
+            $('body').append(notification);
+            
+            setTimeout(function() {
+                notification.alert('close');
+            }, 5000);
+        }
+
         function loadProductCustomers() {
             $.get('@Url.Action("ProductCustomers", "Order")', function(data) {
                 $('#modalContainer').html(data);

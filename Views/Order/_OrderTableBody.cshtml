@@ -1,0 +1,20 @@
+@model IEnumerable<StockManagement.Models.ViewModels.OrderModels.CustomerOrderSummaryViewModel>
+
+@foreach (var customer in Model)
+{
+    <tr>
+        <td>@customer.CustomerName</td>
+        <td>@customer.CustomerEmail</td>
+        <td>@customer.OrderCount</td>
+        <td>@customer.CancelledOrderCount</td>
+        <td>@customer.TotalAmount.ToString("C")</td>
+        <td>@customer.TotalTax.ToString("C")</td>
+        <td>@customer.GrandTotal.ToString("C")</td>
+        <td>@customer.LastOrderDate.ToShortDateString()</td>
+        <td>
+            <button type="button" class="btn btn-primary btn-sm" onclick="loadCustomerOrders('@customer.CustomerId')">
+                Detay
+            </button>
+        </td>
+    </tr>
+}

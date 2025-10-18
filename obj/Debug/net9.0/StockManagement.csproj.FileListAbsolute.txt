@@ -390,3 +390,4 @@
 /Users/leventkalkavan/Desktop/TLSCase/StockManagement/StockManagement/bin/Debug/net9.0/zh-Hans/Microsoft.CodeAnalysis.Scripting.resources.dll
 /Users/leventkalkavan/Desktop/TLSCase/StockManagement/StockManagement/bin/Debug/net9.0/zh-Hant/Microsoft.CodeAnalysis.Scripting.resources.dll
 /Users/leventkalkavan/Desktop/TLSCase/StockManagement/StockManagement/obj/Debug/net9.0/StockManagement.sourcelink.json
+/Users/leventkalkavan/Desktop/TLSCase/StockManagement/StockManagement/bin/Debug/net9.0/System.Net.WebSockets.WebSocketProtocol.dll

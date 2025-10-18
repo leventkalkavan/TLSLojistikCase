@@ -197,7 +197,7 @@ public class OrderDetailService : IOrderDetailService
             .Include(o => o.InvoiceAddress)
             .Include(o => o.OrderDetails)
             .ThenInclude(od => od.Stock)
-            .Where(o => o.IsActive && o.CustomerId == customerId)
+            .Where(o => o.CustomerId == customerId)
             .OrderByDescending(o => o.OrderDate)
             .ToListAsync();
 
@@ -212,6 +212,7 @@ public class OrderDetailService : IOrderDetailService
             Tax = order.Tax,
             DeliveryAddress = $"{order.DeliveryAddress.Address}, {order.DeliveryAddress.Town}, {order.DeliveryAddress.City}",
             InvoiceAddress = $"{order.InvoiceAddress.Address}, {order.InvoiceAddress.Town}, {order.InvoiceAddress.City}",
+            IsActive = order.IsActive,
             OrderDetails = order.OrderDetails
                 .Where(od => od.IsActive)
                 .Select(od => new OrderDetailInfo

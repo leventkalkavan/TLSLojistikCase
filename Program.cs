@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using StockManagement;
 using StockManagement.Context;
 using StockManagement.Entities;
+using StockManagement.Hubs;
 using StockManagement.Services;
 using StockManagement.Services.Interfaces;
 
@@ -21,6 +22,8 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<ICustomerAddressService, CustomerAddressService>();
 builder.Services.AddScoped<IStockService, StockService>();
 builder.Services.AddScoped<IOrderDetailService, OrderDetailService>();
+
+builder.Services.AddSignalR();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -55,6 +58,8 @@ app.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
+
+app.MapHub<OrderHub>("/orderHub");
 
 
 app.Run();
