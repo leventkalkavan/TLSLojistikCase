@@ -10,7 +10,6 @@ public class OrderDetail
     public Guid OrderId { get; set; }
     public Stock Stock { get; set; }
     public Guid StockId { get; set; }
-    [Column(TypeName = "decimal(18,2)")]
     public int Amount { get; set; }
     public bool IsActive { get; set; } =  true;
 }

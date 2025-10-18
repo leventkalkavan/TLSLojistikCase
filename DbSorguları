@@ -1,0 +1,56 @@
+-- 1. Belirli bir ürünü alan müşteriler ve adresleri
+SELECT DISTINCT 
+    s."Name" AS "Ürün Adı",
+    u."Name" AS "Müşteri Adı",
+    ca."City" AS "Şehir",
+    ca."Address" AS "Adres"
+FROM "OrderDetails" od
+JOIN "Orders" o ON od."OrderId" = o."Id"
+JOIN "AspNetUsers" u ON o."CustomerId" = u."Id"
+JOIN "CustomerAddresses" ca ON u."Id" = ca."CustomerId"
+JOIN "Stocks" s ON od."StockId" = s."Id"
+WHERE s."Name" = 'Masa Lambası';
+
+-- 2. Ürün miktarı 1'den büyük siparişler
+SELECT 
+    c."Name" AS "Müşteri Adı",
+    s."Name" AS "Ürün Adı",
+    od."Amount" AS "Adet",
+    o."OrderNo" AS "Sipariş Numarası",
+    o."OrderDate" AS "Sipariş Tarihi"
+FROM "OrderDetails" od
+JOIN "Orders" o ON od."OrderId" = o."Id"
+JOIN "AspNetUsers" c ON o."CustomerId" = c."Id"
+JOIN "Stocks" s ON od."StockId" = s."Id"
+WHERE od."Amount" > 1;
+
+-- 3. Fatura ve teslimat adresi farklı müşteriler
+SELECT DISTINCT 
+    c."Name" AS "Müşteri Adı",
+    o."OrderNo" AS "Sipariş Numarası",
+    da."City" AS "Teslimat Şehri",
+    ia."City" AS "Fatura Şehri"
+FROM "Orders" o
+JOIN "AspNetUsers" c ON o."CustomerId" = c."Id"
+JOIN "CustomerAddresses" da ON o."DeliveryAddressId" = da."Id"
+JOIN "CustomerAddresses" ia ON o."InvoiceAddressId" = ia."Id"
+WHERE o."DeliveryAddressId" <> o."InvoiceAddressId";
+
+-- 4. TLS müşterisinin siparişleri
+SELECT 
+    c."Name" AS "Müşteri Adı",
+    o."OrderNo" AS "Sipariş Numarası",
+    o."OrderDate" AS "Sipariş Tarihi",
+    o."TotalPrice" AS "Toplam Tutar",
+    o."Tax" AS "KDV"
+FROM "Orders" o
+JOIN "AspNetUsers" c ON o."CustomerId" = c."Id"
+WHERE c."Name" ILIKE '%TLS%';
+
+-- 5. İstanbul sipariş sayısı (aktif siparişler)
+SELECT 
+    COUNT(DISTINCT o."Id") AS "İstanbul Sipariş Sayısı"
+FROM "Orders" o
+JOIN "CustomerAddresses" ca ON o."DeliveryAddressId" = ca."Id"
+WHERE ca."City" ILIKE 'İstanbul'
+  AND o."IsActive" = TRUE;
