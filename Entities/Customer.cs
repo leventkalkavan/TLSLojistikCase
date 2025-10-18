@@ -4,6 +4,7 @@ namespace StockManagement.Entities;
 
 public class Customer : IdentityUser
 {
+    public string Name { get; set; }
     public bool IsActive { get; set; } = true;
     public ICollection<CustomerAddress> Addresses { get; set; } = new List<CustomerAddress>();
     public ICollection<Order> Orders { get; set; } = new List<Order>();

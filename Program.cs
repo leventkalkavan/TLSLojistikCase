@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using StockManagement;
 using StockManagement.Context;
 using StockManagement.Entities;
 
@@ -7,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddDefaultIdentity<Customer>()
+builder.Services.AddIdentity<Customer, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 // Add services to the container.
@@ -21,6 +23,16 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    await SeedData.EnsureSeedCustomerAsync(services);
+    await SeedData.EnsureSeedCustomerAddressAsync(services);
+    await SeedData.EnsureSeedStockAsync(services);
+    await SeedData.EnsureSeedOrderAsync(services);
+    await SeedData.EnsureSeedOrderDetailAsync(services);
 }
 
 app.UseHttpsRedirection();
