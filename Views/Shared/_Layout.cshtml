@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/StockManagement.styles.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
 </head>
 <body>
 <header>
@@ -24,14 +25,10 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="CreateOrder"> Sipariş Oluştur</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home"
-                               asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Çıkış
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout"> @User.Identity.Name - Çıkış
                                 Yap</a>
                         </li>
                     }
@@ -48,7 +45,7 @@
 
 <footer class="border-top footer text-muted">
     <div class="container">
-        &copy; 2025 - StockManagement - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        &copy; 2025 - StockManagement
     </div>
 </footer>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

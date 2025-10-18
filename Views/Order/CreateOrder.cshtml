@@ -1,0 +1,199 @@
+@model StockManagement.Models.ViewModels.OrderModels.OrderCreateViewModel
+
+@{
+    ViewData["Title"] = "Yeni Sipariş";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h3>Yeni Sipariş Oluştur</h3>
+        <hr/>
+
+        <form asp-action="CreateOrder" method="post" id="orderForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input asp-for="CustomerId" type="hidden"/>
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Teslimat Adresi</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label asp-for="DeliveryAddressId" class="form-label">Teslimat Adresi Seçin</label>
+                                <select asp-for="DeliveryAddressId" class="form-select"
+                                        asp-items="ViewBag.DeliveryAddresses">
+                                    <option value="">-- Adres Seçin --</option>
+                                </select>
+                                <span asp-validation-for="DeliveryAddressId" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Fatura Adresi</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label asp-for="InvoiceAddressId" class="form-label">Fatura Adresi Seçin</label>
+                                <select asp-for="InvoiceAddressId" class="form-select"
+                                        asp-items="ViewBag.InvoiceAddresses">
+                                    <option value="">-- Adres Seçin --</option>
+                                </select>
+                                <span asp-validation-for="InvoiceAddressId" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5>Sipariş Detayları</h5>
+                    <button type="button" class="btn btn-primary btn-sm" id="addOrderDetail">
+                        <i class="fas fa-plus"></i> Ürün Ekle
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div id="orderDetailsContainer">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Sipariş Özeti</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Ara Toplam:</strong> <span id="subtotal">₺0,00</span></p>
+                            <p><strong>KDV (%20):</strong> <span id="tax">₺0,00</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="h4"><strong>Toplam:</strong> <span id="total">₺0,00</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-success">
+                    Sipariş Oluştur
+                </button>
+                <a asp-action="GetAllOrders" class="btn btn-secondary">
+                    Geri Dön
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let orderDetailIndex = 0;
+
+        function addOrderDetailRow() {
+            const container = document.getElementById('orderDetailsContainer');
+            const rowHtml = `
+                <div class="row mb-3 order-detail-row" data-index="${orderDetailIndex}">
+                    <div class="col-md-4">
+                        <label class="form-label">Ürün</label>
+                        <select name="OrderDetails[${orderDetailIndex}].StockId" class="form-select stock-select" required>
+                            <option value="">-- Ürün Seçin --</option>
+                            
+            
+            
+            
+            @foreach (var stock in ViewBag.Stocks)
+            {
+                <option value="@stock.Value" data-price="@stock.Price">@stock.Text</option>
+            }
+             </select>
+                                                                    </div>
+                                                                    <div class="col-md-3">
+                                                                        <label class="form-label">Miktar</label>
+                                                                        <input type="number" name="OrderDetails[${orderDetailIndex}].Amount" class="form-control amount-input" min="1" value="1" required />
+                        
+                                    
+                                                
+                                                                       
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Birim Fiyat</label>
+                        <input type="text" class="form-control price-input" readonly />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Toplam</label>
+                        <input type="text" class="form-control total-input" readonly />
+                        <button type="button" class="btn btn-danger btn-sm mt-2 remove-row">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', rowHtml);
+            orderDetailIndex++;
+        }
+
+        function removeOrderDetailRow(button) {
+            button.closest('.order-detail-row').remove();
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            let subtotal = 0;
+
+            document.querySelectorAll('.order-detail-row').forEach(row => {
+                const amount = parseFloat(row.querySelector('.amount-input').value) || 0;
+                const price = parseFloat(row.querySelector('.price-input').value) || 0;
+                const total = amount * price;
+
+                row.querySelector('.total-input').value = total.toFixed(2);
+                subtotal += total;
+            });
+
+            const tax = subtotal * 0.20;
+            const total = subtotal + tax;
+
+            document.getElementById('subtotal').textContent = subtotal.toFixed(2) + ' ₺';
+            document.getElementById('tax').textContent = tax.toFixed(2) + ' ₺';
+            document.getElementById('total').textContent = total.toFixed(2) + ' ₺';
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            addOrderDetailRow();
+
+            document.getElementById('addOrderDetail').addEventListener('click', addOrderDetailRow);
+            
+            document.addEventListener('click', function (e) {
+                if (e.target.closest('.remove-row')) {
+                    removeOrderDetailRow(e.target.closest('.remove-row'));
+                }
+            });
+
+            document.addEventListener('change', function (e) {
+                if (e.target.classList.contains('stock-select')) {
+                    const row = e.target.closest('.order-detail-row');
+                    const selectedOption = e.target.options[e.target.selectedIndex];
+                    const price = selectedOption.getAttribute('data-price') || '0';
+                    row.querySelector('.price-input').value = parseFloat(price).toFixed(2);
+                    calculateTotal();
+                }
+            });
+
+            document.addEventListener('input', function (e) {
+                if (e.target.classList.contains('amount-input')) {
+                    calculateTotal();
+                }
+            });
+        });
+    </script>
+
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

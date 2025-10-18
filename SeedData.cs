@@ -109,7 +109,7 @@ public class SeedData
         var rnd = new Random();
         int cityIndex = 0;
 
-        foreach (var customer in customers.Take(14))
+        foreach (var customer in customers)
         {
             var (city, town, postal) = cityData[cityIndex++ % cityData.Length];
             addresses.Add(new CustomerAddress
@@ -123,36 +123,22 @@ public class SeedData
                 Address = $"{town} Mah. {rnd.Next(1, 200)}. Sok. No:{rnd.Next(1, 50)}",
                 PostalCode = postal
             });
-        }
-
-        foreach (var customer in customers.Skip(14).Take(3))
-        {
-            var (city1, town1, postal1) = cityData[rnd.Next(cityData.Length)];
-            var (city2, town2, postal2) = cityData[rnd.Next(cityData.Length)];
-
-            addresses.Add(new CustomerAddress
+   
+            if (rnd.Next(0, 3) == 0)
             {
-                Id = Guid.NewGuid(),
-                CustomerId = customer.Id,
-                Type = "Ev",
-                Country = "Türkiye",
-                City = city1,
-                Town = town1,
-                Address = $"{town1} Mah. {rnd.Next(1, 150)}. Sok. No:{rnd.Next(1, 40)}",
-                PostalCode = postal1
-            });
-
-            addresses.Add(new CustomerAddress
-            {
-                Id = Guid.NewGuid(),
-                CustomerId = customer.Id,
-                Type = "İş",
-                Country = "Türkiye",
-                City = city2,
-                Town = town2,
-                Address = $"{town2} Cd. No:{rnd.Next(50, 250)} Kat:{rnd.Next(1, 5)}",
-                PostalCode = postal2
-            });
+                var (city2, town2, postal2) = cityData[rnd.Next(cityData.Length)];
+                addresses.Add(new CustomerAddress
+                {
+                    Id = Guid.NewGuid(),
+                    CustomerId = customer.Id,
+                    Type = "İş",
+                    Country = "Türkiye",
+                    City = city2,
+                    Town = town2,
+                    Address = $"{town2} Cd. No:{rnd.Next(50, 250)} Kat:{rnd.Next(1, 5)}",
+                    PostalCode = postal2
+                });
+            }
         }
 
         await context.CustomerAddresses.AddRangeAsync(addresses);
@@ -212,25 +198,22 @@ public class SeedData
         var orders = new List<Order>();
 
         var multiOrderCustomers = customers
-            .Where(c => c.Name is "Levent Kalkavan" or "Mehmet Yılmaz" or "Ayşe Kaya")
+            .Where(c => c.Name is "Levent Kalkavan" or "Mehmet Yılmaz" or "Ayşe Kaya" or "TLS Ornek")
             .ToList();
 
-        var allCustomers = customers.Take(20).ToList();
-        var orderCount = 0;
-
-        foreach (var customer in allCustomers)
+        foreach (var customer in customers)
         {
-            int ordersToCreate = multiOrderCustomers.Contains(customer) ? 2 : 1;
+            var customerAddresses = addresses.Where(a => a.CustomerId == customer.Id).ToList();
+            if (!customerAddresses.Any()) continue;
+
+            int ordersToCreate = multiOrderCustomers.Contains(customer) ? rnd.Next(2, 4) : 1;
 
             for (int i = 0; i < ordersToCreate; i++)
             {
-                var customerAddresses = addresses.Where(a => a.CustomerId == customer.Id).ToList();
-                if (!customerAddresses.Any()) continue;
-
                 var deliveryAddress = customerAddresses[rnd.Next(customerAddresses.Count)];
                 var invoiceAddress = deliveryAddress;
 
-                bool useDifferentAddress = orderCount >= 15 && customerAddresses.Count > 1;
+                bool useDifferentAddress = customerAddresses.Count > 1 && rnd.Next(0, 2) == 1;
                 if (useDifferentAddress)
                 {
                     invoiceAddress = customerAddresses.FirstOrDefault(a => a.Id != deliveryAddress.Id)
@@ -238,7 +221,7 @@ public class SeedData
                 }
 
                 decimal total = rnd.Next(1000, 30000);
-                decimal tax = Math.Round(total * 0.18m, 2);
+                decimal tax = Math.Round(total * 0.20m, 2);
 
                 orders.Add(new Order
                 {
@@ -252,14 +235,7 @@ public class SeedData
                     InvoiceAddressId = invoiceAddress.Id,
                     IsActive = true
                 });
-
-                orderCount++;
-                if (orderCount >= 20)
-                    break;
             }
-
-            if (orderCount >= 20)
-                break;
         }
 
         await context.Orders.AddRangeAsync(orders);
@@ -283,6 +259,7 @@ public class SeedData
         var rnd = new Random();
         var orderDetails = new List<OrderDetail>();
 
+        var orderIndex = 0;
         foreach (var order in orders)
         {
             int detailCount = rnd.Next(1, 4);
@@ -290,7 +267,17 @@ public class SeedData
 
             foreach (var stock in selectedStocks)
             {
-                int quantity = rnd.Next(1, 11);
+                int quantity;
+
+                if (orderIndex < 14)
+                {
+                    quantity = 1;
+                }
+                else
+                {
+                    quantity = rnd.Next(2, 8);
+                }
+
                 decimal total = stock.Price * quantity;
 
                 orderDetails.Add(new OrderDetail
@@ -301,10 +288,12 @@ public class SeedData
                     Amount = quantity,
                     IsActive = true
                 });
-                
+
                 order.TotalPrice += total;
                 order.Tax = Math.Round(order.TotalPrice * 0.20m, 2);
             }
+
+            orderIndex++;
         }
 
         await context.OrderDetails.AddRangeAsync(orderDetails);

@@ -10,7 +10,7 @@ public class Order
     public string CustomerId { get; set; }
 
     public DateTime OrderDate { get; set; } = DateTime.UtcNow;
-    public string OrderNo { get; set; } = Guid.NewGuid().ToString();
+    public string OrderNo { get; set; } = Guid.NewGuid().ToString()[..8];
 
     [Column(TypeName = "decimal(18,2)")] public decimal TotalPrice { get; set; }
 

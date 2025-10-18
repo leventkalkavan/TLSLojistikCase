@@ -1,0 +1,45 @@
+@model IEnumerable<StockManagement.Models.ViewModels.OrderModels.CustomerOrderSummaryViewModel>
+
+<h3>Müşteri Sipariş Özeti</h3>
+<a asp-action="CreateOrder" class="btn btn-success mb-3">Yeni Sipariş</a>
+<a asp-action="Index" asp-controller="Home" class="btn btn-secondary mb-3">Geri Dön</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr><th>Müşteri</th><th>Email</th><th>Sipariş Sayısı</th><th>Ara Toplam</th><th>KDV</th><th>Toplam</th><th>Son Sipariş</th><th></th></tr>
+    </thead>
+    <tbody>
+        @foreach (var customer in Model)
+        {
+            <tr>
+                <td>@customer.CustomerName</td>
+                <td>@customer.CustomerEmail</td>
+                <td>@customer.OrderCount</td>
+                <td>@customer.TotalAmount.ToString("C")</td>
+                <td>@customer.TotalTax.ToString("C")</td>
+                <td>@customer.GrandTotal.ToString("C")</td>
+                <td>@customer.LastOrderDate.ToShortDateString()</td>
+                <td>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="loadCustomerOrders('@customer.CustomerId')">
+                        Detay
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div id="modalContainer"></div>
+
+@section Scripts {
+    <script>
+        function loadCustomerOrders(customerId) {
+            $.get('@Url.Action("GetCustomerOrders", "Order")', { customerId: customerId }, function(data) {
+                $('#modalContainer').html(data);
+                $('#customerOrdersModal').modal('show');
+            }).fail(function() {
+                alert('Veriler yüklenirken bir hata oluştu.');
+            });
+        }
+    </script>
+}

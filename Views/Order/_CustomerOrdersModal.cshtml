@@ -1,0 +1,103 @@
+@model IEnumerable<StockManagement.Models.ViewModels.OrderDetailModels.CustomerOrderDetailsViewModel>
+
+<div class="modal fade" id="customerOrdersModal" tabindex="-1" aria-labelledby="customerOrdersModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="customerOrdersModalLabel">Müşteri Sipariş Detayları</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+            <div class="modal-body p-4">
+                @if (Model.Any())
+                {
+                    <div class="row g-4">
+                        @foreach (var order in Model)
+                        {
+                            <div class="col-lg-6">
+                                <div class="card h-100 shadow-sm border-0">
+                                    <div class="card-header bg-light border-0">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h6 class="mb-0 fw-bold text-primary">Sipariş #@order.OrderNo</h6>
+                                            <span class="badge bg-secondary">@order.OrderDate.ToString("dd.MM.yyyy")</span>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <h6 class="mb-1 text-dark">@order.CustomerName</h6>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <small class="text-muted fw-bold">Teslimat Adresi:</small>
+                                            <p class="mb-0 text-muted small">@order.DeliveryAddress</p>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <small class="text-muted fw-bold">Fatura Adresi:</small>
+                                            <p class="mb-0 text-muted small">@order.InvoiceAddress</p>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <small class="text-muted fw-bold">Sipariş Detayları:</small>
+                                            <div class="table-responsive">
+                                                <table class="table table-sm table-hover">
+                                                    <thead class="table-light">
+                                                        <tr>
+                                                            <th class="small">Ürün</th>
+                                                            <th class="small">Miktar</th>
+                                                            <th class="small">Birim Fiyat</th>
+                                                            <th class="small">Toplam</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var detail in order.OrderDetails)
+                                                        {
+                                                            <tr>
+                                                                <td class="small">@detail.StockName</td>
+                                                                <td class="small">@detail.Amount</td>
+                                                                <td class="small">@detail.UnitPrice.ToString("C")</td>
+                                                                <td class="small fw-bold">@detail.TotalPrice.ToString("C")</td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <div class="border-top pt-3">
+                                            <div class="row text-end">
+                                                <div class="col-12">
+                                                    <div class="mb-1 small">
+                                                        <span class="text-muted">Ara Toplam:</span> <strong>@((order.TotalPrice - order.Tax).ToString("C"))</strong>
+                                                    </div>
+                                                    <div class="mb-1 small">
+                                                        <span class="text-muted">KDV:</span> <strong>@(order.Tax.ToString("C"))</strong>
+                                                    </div>
+                                                    <div class="h6 text-primary">
+                                                        <span class="text-muted">Toplam:</span> <strong>@(order.TotalPrice.ToString("C"))</strong>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-5">
+                        <div class="text-muted">
+                            <i class="fas fa-inbox fa-3x mb-3"></i>
+                            <h5>Bu müşteriye ait sipariş bulunmuyor</h5>
+                            <p class="mb-0">Henüz sipariş verilmemiş</p>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="modal-footer bg-light">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>

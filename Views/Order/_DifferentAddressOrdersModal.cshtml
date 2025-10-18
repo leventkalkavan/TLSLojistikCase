@@ -1,0 +1,66 @@
+@model IEnumerable<StockManagement.Models.ViewModels.OrderDetailModels.DifferentAddressOrdersViewModel>
+
+<div class="modal fade" id="differentAddressOrdersModal" tabindex="-1" aria-labelledby="differentAddressOrdersModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title" id="differentAddressOrdersModalLabel">Adresi Farklı Olan Siparişler</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+            <div class="modal-body p-4">
+                @if (Model.Any())
+                {
+                    <div class="row g-4">
+                        @foreach (var order in Model)
+                        {
+                            <div class="col-lg-6">
+                                <div class="card h-100 shadow-sm border-0">
+                                    <div class="card-header bg-light border-0">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h6 class="mb-0 fw-bold text-warning">Sipariş #@order.OrderNo</h6>
+                                            <span class="badge bg-secondary">@order.OrderDate.ToString("dd.MM.yyyy")</span>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <h6 class="mb-1 text-dark">@order.CustomerName</h6>
+                                            <small class="text-muted">@order.CustomerEmail</small>
+                                        </div>
+                                        
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <small class="text-muted fw-bold">Teslimat Adresi:</small>
+                                                    <p class="mb-0 text-muted small">@order.DeliveryAddress</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <small class="text-muted fw-bold">Fatura Adresi:</small>
+                                                    <p class="mb-0 text-muted small">@order.InvoiceAddress</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-5">
+                        <div class="text-muted">
+                            <i class="fas fa-map-marker-alt fa-3x mb-3"></i>
+                            <h5>Henüz bu kriterde sipariş bulunmuyor</h5>
+                            <p class="mb-0">Fatura adresi ile teslimat adresi farklı olan siparişler burada görüntülenecek</p>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="modal-footer bg-light">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>

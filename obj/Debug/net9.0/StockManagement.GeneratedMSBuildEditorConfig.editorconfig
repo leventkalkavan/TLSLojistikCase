@@ -36,8 +36,40 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/leventkalkavan/Desktop/TLSCase/StockManagement/StockManagement/Views/Home/Privacy.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9Qcml2YWN5LmNzaHRtbA==
+[/Users/leventkalkavan/Desktop/TLSCase/StockManagement/StockManagement/Views/Order/CreateOrder.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvT3JkZXIvQ3JlYXRlT3JkZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/leventkalkavan/Desktop/TLSCase/StockManagement/StockManagement/Views/Order/GetAllOrders.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvT3JkZXIvR2V0QWxsT3JkZXJzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/leventkalkavan/Desktop/TLSCase/StockManagement/StockManagement/Views/Order/_CustomerOrdersModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvT3JkZXIvX0N1c3RvbWVyT3JkZXJzTW9kYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/leventkalkavan/Desktop/TLSCase/StockManagement/StockManagement/Views/Order/_DifferentAddressOrdersModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvT3JkZXIvX0RpZmZlcmVudEFkZHJlc3NPcmRlcnNNb2RhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/leventkalkavan/Desktop/TLSCase/StockManagement/StockManagement/Views/Order/_IstanbulOrdersModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvT3JkZXIvX0lzdGFuYnVsT3JkZXJzTW9kYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/leventkalkavan/Desktop/TLSCase/StockManagement/StockManagement/Views/Order/_MultiQuantityOrdersModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvT3JkZXIvX011bHRpUXVhbnRpdHlPcmRlcnNNb2RhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/leventkalkavan/Desktop/TLSCase/StockManagement/StockManagement/Views/Order/_MyOrdersModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvT3JkZXIvX015T3JkZXJzTW9kYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/leventkalkavan/Desktop/TLSCase/StockManagement/StockManagement/Views/Order/_ProductCustomersModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvT3JkZXIvX1Byb2R1Y3RDdXN0b21lcnNNb2RhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/leventkalkavan/Desktop/TLSCase/StockManagement/StockManagement/Views/Order/_TLSOrdersModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvT3JkZXIvX1RMU09yZGVyc01vZGFsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/leventkalkavan/Desktop/TLSCase/StockManagement/StockManagement/Views/Shared/Error.cshtml]
