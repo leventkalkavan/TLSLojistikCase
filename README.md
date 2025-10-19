@@ -171,3 +171,9 @@ Mailde ek olarak gönderilen excel dosyasındaki tüm sorgular hem SQL hem LINQ 
 
 5. Tarayıcıdan aç:
    http://localhost:5160
+
+   
+Not:
+Proje şu anda aktif Supabase veritabanı ile entegre çalışmaktadır.
+Bu nedenle projeyi çalıştırmak için ek bir veritabanı kurulumu yapmaya gerek yoktur,
+uygulamayı ayağa kaldırmanız yeterlidir.
