@@ -2,7 +2,7 @@
 
 Bu proje, verilen teknik test senaryosundaki gereksinimleri karşılamak amacıyla geliştirilmiş bir sipariş yönetim sistemidir. Uygulama, kullanıcıların sisteme giriş yapabildiği, sipariş oluşturabildiği, sipariş kalemlerini ekleyebildiği ve oluşturulan siparişleri görüntüleyip filtreleyebildiği bir web projesidir.
 
-Proje .NET 9 SDK kullanılarak ASP.NET Core MVC mimarisiyle yazılmıştır. Veritabanı olarak PostgreSQL tercih edilmiştir. Database’in local ortamla sınırlı kalmaması için Supabase üzerinde barındırılmıştır. Supabase, PostgreSQL tabanlı olduğu için Entity Framework Core üzerinde Npgsql sağlayıcısı kullanılarak tam uyumlu hale getirilmiştir.
+Proje .NET 9 SDK kullanılarak ASP.NET Core MVC mimarisiyle yazılmıştır. Veritabanı olarak PostgreSQL tercih edilmiştir. Database’in local ortamla sınırlı kalmaması için Supabase üzerinde barındırılmıştır. Supabase, PostgreSQL tabanlı olduğu için Entity Framework Core üzerinde Npgsql sağlayıcısı kullanılarak tam uyumlu hale getirilmiştir. Örnek kullanıcı: 'levent.kalkavan@mail.com', şifre: 'LeventKalkavan1.' sistem tarafından otomatik olarak ekleniyor. Ad+Soyad+1+. şeklinde kayıtlar yapılmıştır.
 
 ---
 
